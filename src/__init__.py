@@ -1,5 +1,6 @@
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
+from src.core.db.session import Base, engine
 from src.routers import shortener
 from src.core.exceptions.base import CustomException
 
@@ -16,6 +17,8 @@ def init_listeners(app: FastAPI):
             content={"error_code": exc.error_code, "message": exc.message},
         )
 
+def init_db():
+    Base.metadata.create_all(bind=engine)
 
 def create_app():
     app = FastAPI(
@@ -27,6 +30,7 @@ def create_app():
     )
     init_routers(app)
     init_listeners(app)
+    init_db()
     return app
 
 

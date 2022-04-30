@@ -6,6 +6,6 @@ router = APIRouter(
     responses={404: {"description": "Not found"}},
 )
 
-@router.get('/')
+@router.get('')
 def index():
     return {''}

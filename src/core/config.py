@@ -7,6 +7,8 @@ class Settings(BaseSettings):
     DEBUG: bool
     APP_HOST: str = "0.0.0.0"
     APP_PORT: int = 8000
+    SQLALCHEMY_DATABASE_URL: str
+    SQLALCHEMY_DATABASE_URL_TEST: str
 
     class Config:
         env_file = ".env"
