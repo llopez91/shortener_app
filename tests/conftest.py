@@ -6,6 +6,10 @@ from src.core.config import config
 from src.core.db.session import Base, get_db
 from sqlalchemy.orm import Session
 
+from src.shortener.models import ShortUrl
+from src.shortener.repositories import ShorterRepo
+from src.shortener.services import ShorterService
+
 @pytest.fixture(scope="session")
 def db_engine():
     """
@@ -45,12 +49,25 @@ def client(db):
     with TestClient(app) as c:
         yield c
 
-@pytest.fixture(scope="function")
-def application(db):
-    """
-    Return an app
-    """
-    app.dependency_overrides = {}
-    app.dependency_overrides[get_db] = lambda: db
 
-    yield app
+@pytest.fixture(scope="function")
+def repository(db):
+    """
+    Return an repository
+    """
+    
+    yield ShorterRepo(db)
+        
+@pytest.fixture(scope="function")
+def service(repository):
+    """
+    Return service
+    """
+
+    yield ShorterService(repository)
+    
+@pytest.fixture
+def shorturl(db):
+    item = ShortUrl(url="http://www.google.com",shortcode="6VcwJUYK")
+    db.add(item)
+    db.commit()

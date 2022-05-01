@@ -11,21 +11,21 @@ def test_expander_bad_method(client: TestClient):
     assert response.status_code == 405
     
     
-def test_shortener_in_db(client: TestClient):
+def test_shortener_in_db(shorturl, client: TestClient):
     response = client.post(
         url="shortener",
         headers={"Content-Type": "application/json"},
-        json={"url": "www.google.com"}
+        json={"url": "http://www.google.com"}
     )
     assert response.json()['shortcode'] == '6VcwJUYK'
     
     
-def test_expander_in_db(client: TestClient):
+def test_expander_in_db(shorturl, client: TestClient):
     response = client.get(
         url="expander",
         params={"shortcode": "6VcwJUYK"}
     )
-    assert response.json()['url'] == 'www.google.com'
+    assert response.json()['url'] == 'http://www.google.com'
     
     
 def test_shortener_bad_request(client: TestClient):
@@ -57,13 +57,13 @@ def test_shortener(client: TestClient):
     response = client.post(
         url="shortener",
         headers={"Content-Type": "application/json"},
-        json={"url": "www.github.com"}
+        json={"url": "https://www.github.com"}
     )
     assert len(response.json()['shortcode']) == 8
     
 
 def test_shortener_and_expander(client: TestClient):
-    url = "www.facebook.com"
+    url = "https://www.facebook.com"
     response = client.post(
         url="shortener",
         headers={"Content-Type": "application/json"},

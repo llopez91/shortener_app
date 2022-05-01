@@ -1,15 +1,17 @@
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
 from src.core.db.session import Base, engine
-from src.routers import shortener
+from src.routers import router
 from src.core.exceptions.base import CustomException
+import src.shortener.models
 
 def init_routers(app: FastAPI):
-    app.include_router(shortener.router)
+    """ Load routers """
+    app.include_router(router)
 
 
 def init_listeners(app: FastAPI):
-    # Exception handler
+    """ Exceptions Handler """
     @app.exception_handler(CustomException)
     async def custom_exception_handler(request: Request, exc: CustomException):
         return JSONResponse(
@@ -18,6 +20,7 @@ def init_listeners(app: FastAPI):
         )
 
 def init_db():
+    """ Init Database and Tables"""
     Base.metadata.create_all(bind=engine)
 
 def create_app():
