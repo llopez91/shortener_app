@@ -10,9 +10,9 @@ uvicorn = "*"
 pydantic = "*"
 sqlalchemy = "*"
 python-dotenv = "*"
+pytest = "*"
 
 [dev-packages]
-pytest = "*"
 
 [requires]
 python_version = "3.9"
